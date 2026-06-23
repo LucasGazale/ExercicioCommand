@@ -149,16 +149,30 @@ public class Main  {
                 break;
             }
             else if (commandName.equals("new") && parts.length == 3) {
-                int id = Integer.parseInt(parts[1]);
-                String nome = parts[2];
-                Pessoa pessoa = new Pessoa(id, nome);
-                server.getCommand("new").execute(pessoa);
+                try {
+                    int id = Integer.parseInt(parts[1]);
+                    String nome = parts[2];
+                    server.getCommand("new").execute(new Pessoa(id, nome));
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid command or arguments");
+                    continue;
+                }
             } else if (commandName.equals("delete") && parts.length == 2) {
-                int id = Integer.parseInt(parts[1]);
-                server.getCommand("delete").execute(id);
+                try {
+                    int id = Integer.parseInt(parts[1]);
+                    server.getCommand("delete").execute(id);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid command or arguments");
+                    continue;
+                }
             } else if (commandName.equals("get") && parts.length == 2) {
-                int id = Integer.parseInt(parts[1]);
-                server.getCommand("get").execute(id);
+                try {
+                    int id = Integer.parseInt(parts[1]);
+                    server.getCommand("get").execute(id);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid command or arguments");
+                    continue;
+                }
             } else if (commandName.equals("all")) {
                 server.getCommand("all").execute(null);
             } else {
