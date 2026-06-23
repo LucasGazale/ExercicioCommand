@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.function.Function;
 
 class Pessoa {
     int id;
@@ -36,74 +37,68 @@ class Database {
 }
 
 interface Command {
-    public abstract void execute(Object arg);
+    void execute();
 }
 
 class NewPessoa implements Command {
-    // Database ID: Pessoa
     private Database db;
+    private int id;
+    private String nome;
 
-    public NewPessoa(Database db) {
+    public NewPessoa(Database db, int id, String nome) {
         this.db = db;
+        this.id = id;
+        this.nome = nome;
     }
 
-    public void execute(Object arg) {
-        if (arg instanceof Pessoa) {
-            db.addPessoa((Pessoa) arg);
-        } else {
-            throw new IllegalArgumentException("Argument must be of type Pessoa");
-        }
+    public void execute() {
+        db.addPessoa(new Pessoa(id, nome));
+        System.out.println("Pessoa adicionada: " + db.getPessoa(id));
     }
 }
 
 class DeletePessoa implements Command {
-    // Database ID: Pessoa
     private Database db;
+    private int id;
 
-    public DeletePessoa(Database db) {
+    public DeletePessoa(Database db, int id) {
         this.db = db;
+        this.id = id;
     }
 
-    public void execute(Object arg) {
-        if (arg instanceof Integer) {
-            db.deletePessoa((Integer) arg);
-        } else {
-            throw new IllegalArgumentException("Argument must be of type Integer");
-        }
+    public void execute() {
+        db.deletePessoa(id);
+        System.out.println("Pessoa removida: " + id);
     }
 }
 
 class GetPessoa implements Command {
-    // Database ID: Pessoa
     private Database db;
+    private int id;
 
-    public GetPessoa(Database db) {
+    public GetPessoa(Database db, int id) {
         this.db = db;
+        this.id = id;
     }
 
-    public void execute(Object arg) {
-        if (arg instanceof Integer) {
-            Pessoa pessoa = db.getPessoa((Integer) arg);
-            if (pessoa != null) {
-                System.out.println(pessoa);
-            } else {
-                System.out.println("Pessoa not found");
-            }
+    public void execute() {
+        Pessoa pessoa = db.getPessoa(id);
+        if (pessoa != null) {
+            System.out.println(pessoa);
         } else {
-            throw new IllegalArgumentException("Argument must be of type Integer");
+            System.out.println("Pessoa not found");
         }
     }
 }
 
 class All implements Command {
-    // Database ID: Pessoa
     private Database db;
 
     public All(Database db) {
         this.db = db;
     }
 
-    public void execute(Object args) {
+    public void execute() {
         HashMap<Integer, Pessoa> pessoas = db.getAllPessoas();
         if (pessoas.isEmpty()) {
             System.out.println("No pessoas found");
@@ -117,67 +112,47 @@ class All implements Command {
 
 class Server {
     private Database db;
-    private HashMap<String, Command> commands;
+    private HashMap<String, Function<String[], Command>> factories;
 
     public Server() {
         db = new Database();
-        commands = new HashMap<>();
-        commands.put("new", new NewPessoa(db));
-        commands.put("delete", new DeletePessoa(db));
-        commands.put("get", new GetPessoa(db));
-        commands.put("all", new All(db));
+        factories = new HashMap<>();
+        factories.put("new",    parts -> new NewPessoa(db, Integer.parseInt(parts[1]), parts[2]));
+        factories.put("delete", parts -> new DeletePessoa(db, Integer.parseInt(parts[1])));
+        factories.put("get",    parts -> new GetPessoa(db, Integer.parseInt(parts[1])));
+        factories.put("all",    parts -> new All(db));
     }
 
-    public Command getCommand(String commandName) {
-        return commands.get(commandName);
+    public void service(String[] parts) {
+        Function<String[], Command> factory = factories.get(parts[0]);
+        if (factory != null) {
+            factory.apply(parts).execute();
+        } else {
+            System.out.println("Invalid command or arguments");
+        }
     }
 }
 
-public class Main  {
+public class Main {
     public static void main(String[] args) {
         Server server = new Server();
         System.out.println("Server started. Listening for commands...");
-        while (true)  {
+
+        while (true) {
             System.out.print("Enter command (new <id> <nome>, delete <id>, get <id>, all) or 'exit' to quit: ");
 
             String input = System.console().readLine();
             String[] parts = input.split(" ");
-            String commandName = parts[0];
 
-            if (commandName.equals("exit")) {
+            if (parts[0].equals("exit")) {
                 System.out.println("Exiting...");
                 break;
             }
-            else if (commandName.equals("new") && parts.length == 3) {
-                try {
-                    int id = Integer.parseInt(parts[1]);
-                    String nome = parts[2];
-                    server.getCommand("new").execute(new Pessoa(id, nome));
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid command or arguments");
-                    continue;
-                }
-            } else if (commandName.equals("delete") && parts.length == 2) {
-                try {
-                    int id = Integer.parseInt(parts[1]);
-                    server.getCommand("delete").execute(id);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid command or arguments");
-                    continue;
-                }
-            } else if (commandName.equals("get") && parts.length == 2) {
-                try {
-                    int id = Integer.parseInt(parts[1]);
-                    server.getCommand("get").execute(id);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid command or arguments");
-                    continue;
-                }
-            } else if (commandName.equals("all")) {
-                server.getCommand("all").execute(null);
-            } else {
+
+            try {
+                server.service(parts);
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid command or arguments");
-                
             }
         }
     }
