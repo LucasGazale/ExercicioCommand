@@ -1,5 +1,4 @@
 import java.util.HashMap;
-import java.util.function.Function;
 
 class Pessoa {
     int id;
@@ -131,5 +130,41 @@ class Server {
 
     public Command getCommand(String commandName) {
         return commands.get(commandName);
+    }
+}
+
+public class Main  {
+    public static void main(String[] args) {
+        Server server = new Server();
+        System.out.println("Server started. Listening for commands...");
+        while (true)  {
+            System.out.print("Enter command (new <id> <nome>, delete <id>, get <id>, all) or 'exit' to quit: ");
+
+            String input = System.console().readLine();
+            String[] parts = input.split(" ");
+            String commandName = parts[0];
+
+            if (commandName.equals("exit")) {
+                System.out.println("Exiting...");
+                break;
+            }
+            else if (commandName.equals("new") && parts.length == 3) {
+                int id = Integer.parseInt(parts[1]);
+                String nome = parts[2];
+                Pessoa pessoa = new Pessoa(id, nome);
+                server.getCommand("new").execute(pessoa);
+            } else if (commandName.equals("delete") && parts.length == 2) {
+                int id = Integer.parseInt(parts[1]);
+                server.getCommand("delete").execute(id);
+            } else if (commandName.equals("get") && parts.length == 2) {
+                int id = Integer.parseInt(parts[1]);
+                server.getCommand("get").execute(id);
+            } else if (commandName.equals("all")) {
+                server.getCommand("all").execute(null);
+            } else {
+                System.out.println("Invalid command or arguments");
+                
+            }
+        }
     }
 }
