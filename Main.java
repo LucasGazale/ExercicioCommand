@@ -37,7 +37,7 @@ class Database {
 }
 
 interface Command {
-    public abstract void execute();
+    public abstract void execute(Object arg);
 }
 
 class NewPessoa implements Command {
@@ -48,7 +48,7 @@ class NewPessoa implements Command {
         this.db = db;
     }
 
-    public void execute() {
+    public void execute(Object arg) {
 
     }
 }
@@ -61,7 +61,7 @@ class DeletePessoa implements Command {
         this.db = db;
     }
 
-    public void execute() {
+    public void execute(Object arg) {
 
     }
 }
@@ -74,7 +74,7 @@ class GetPessoa implements Command {
         this.db = db;
     }
 
-    public void execute() {
+    public void execute(Object arg) {
 
     }
 }
@@ -87,7 +87,7 @@ class All implements Command {
         this.db = db;
     }
 
-    public void execute() {
+    public void execute(Object args) {
 
     }
 }
