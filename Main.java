@@ -66,7 +66,11 @@ class DeletePessoa implements Command {
     }
 
     public void execute(Object arg) {
-        
+        if (arg instanceof Integer) {
+            db.deletePessoa((Integer) arg);
+        } else {
+            throw new IllegalArgumentException("Argument must be of type Integer");
+        }
     }
 }
 
