@@ -115,3 +115,21 @@ class All implements Command {
         }
     }
 }
+
+class Server {
+    private Database db;
+    private HashMap<String, Command> commands;
+
+    public Server() {
+        db = new Database();
+        commands = new HashMap<>();
+        commands.put("new", new NewPessoa(db));
+        commands.put("delete", new DeletePessoa(db));
+        commands.put("get", new GetPessoa(db));
+        commands.put("all", new All(db));
+    }
+
+    public Command getCommand(String commandName) {
+        return commands.get(commandName);
+    }
+}
