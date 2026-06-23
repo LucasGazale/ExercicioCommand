@@ -16,6 +16,10 @@ class Pessoa {
     }
 }
 
-abstract class Command {
+interface Command {
     public abstract void execute();
+}
+
+class NewPessoa implements Command {
+
 }
