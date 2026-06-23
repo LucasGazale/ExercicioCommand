@@ -105,6 +105,13 @@ class All implements Command {
     }
 
     public void execute(Object args) {
-
+        HashMap<Integer, Pessoa> pessoas = db.getAllPessoas();
+        if (pessoas.isEmpty()) {
+            System.out.println("No pessoas found");
+        } else {
+            for (Pessoa pessoa : pessoas.values()) {
+                System.out.println(pessoa);
+            }
+        }
     }
 }
