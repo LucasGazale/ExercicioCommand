@@ -21,5 +21,14 @@ interface Command {
 }
 
 class NewPessoa implements Command {
+    // Database ID: Pessoa
+    private HashMap<Integer, Pessoa> db;
 
+    public NewPessoa(HashMap<Integer, Pessoa> db) {
+        this.db = db;
+    }
+
+    public void execute() {
+
+    }
 }
