@@ -83,7 +83,16 @@ class GetPessoa implements Command {
     }
 
     public void execute(Object arg) {
-
+        if (arg instanceof Integer) {
+            Pessoa pessoa = db.getPessoa((Integer) arg);
+            if (pessoa != null) {
+                System.out.println(pessoa);
+            } else {
+                System.out.println("Pessoa not found");
+            }
+        } else {
+            throw new IllegalArgumentException("Argument must be of type Integer");
+        }
     }
 }
 
