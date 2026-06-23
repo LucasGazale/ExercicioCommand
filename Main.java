@@ -49,7 +49,11 @@ class NewPessoa implements Command {
     }
 
     public void execute(Object arg) {
-
+        if (arg instanceof Pessoa) {
+            db.addPessoa((Pessoa) arg);
+        } else {
+            throw new IllegalArgumentException("Argument must be of type Pessoa");
+        }
     }
 }
 
@@ -62,7 +66,7 @@ class DeletePessoa implements Command {
     }
 
     public void execute(Object arg) {
-
+        
     }
 }
 
