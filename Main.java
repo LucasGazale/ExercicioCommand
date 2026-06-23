@@ -16,6 +16,26 @@ class Pessoa {
     }
 }
 
+class Database {
+    private HashMap<Integer, Pessoa> db = new HashMap<>();
+
+    public void addPessoa(Pessoa pessoa) {
+        db.put(pessoa.id, pessoa);
+    }
+
+    public void deletePessoa(int id) {
+        db.remove(id);
+    }
+
+    public Pessoa getPessoa(int id) {
+        return db.get(id);
+    }
+
+    public HashMap<Integer, Pessoa> getAllPessoas() {
+        return db;
+    }
+}
+
 interface Command {
     public abstract void execute();
 }
