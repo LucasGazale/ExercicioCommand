@@ -15,3 +15,7 @@ class Pessoa {
         return "Pessoa{id=" + id + ", nome='" + nome + "'}";
     }
 }
+
+abstract class Command {
+    public abstract void execute();
+}
