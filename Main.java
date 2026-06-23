@@ -42,9 +42,9 @@ interface Command {
 
 class NewPessoa implements Command {
     // Database ID: Pessoa
-    private HashMap<Integer, Pessoa> db;
+    private Database db;
 
-    public NewPessoa(HashMap<Integer, Pessoa> db) {
+    public NewPessoa(Database db) {
         this.db = db;
     }
 
@@ -55,9 +55,9 @@ class NewPessoa implements Command {
 
 class DeletePessoa implements Command {
     // Database ID: Pessoa
-    private HashMap<Integer, Pessoa> db;
+    private Database db;
 
-    public DeletePessoa(HashMap<Integer, Pessoa> db) {
+    public DeletePessoa(Database db) {
         this.db = db;
     }
 
@@ -68,9 +68,9 @@ class DeletePessoa implements Command {
 
 class GetPessoa implements Command {
     // Database ID: Pessoa
-    private HashMap<Integer, Pessoa> db;
+    private Database db;
 
-    public GetPessoa(HashMap<Integer, Pessoa> db) {
+    public GetPessoa(Database db) {
         this.db = db;
     }
 
@@ -81,9 +81,9 @@ class GetPessoa implements Command {
 
 class All implements Command {
     // Database ID: Pessoa
-    private HashMap<Integer, Pessoa> db;
+    private Database db;
 
-    public All(HashMap<Integer, Pessoa> db) {
+    public All(Database db) {
         this.db = db;
     }
 
