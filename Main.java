@@ -32,3 +32,42 @@ class NewPessoa implements Command {
 
     }
 }
+
+class DeletePessoa implements Command {
+    // Database ID: Pessoa
+    private HashMap<Integer, Pessoa> db;
+
+    public DeletePessoa(HashMap<Integer, Pessoa> db) {
+        this.db = db;
+    }
+
+    public void execute() {
+
+    }
+}
+
+class GetPessoa implements Command {
+    // Database ID: Pessoa
+    private HashMap<Integer, Pessoa> db;
+
+    public GetPessoa(HashMap<Integer, Pessoa> db) {
+        this.db = db;
+    }
+
+    public void execute() {
+
+    }
+}
+
+class All implements Command {
+    // Database ID: Pessoa
+    private HashMap<Integer, Pessoa> db;
+
+    public All(HashMap<Integer, Pessoa> db) {
+        this.db = db;
+    }
+
+    public void execute() {
+
+    }
+}
